@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willowbrook Psychology — A Place to Heal & Grow</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --sage: #7A9E7E; --sage-light: #C8DCC9; --sage-pale: #EFF5EF;
+  --terracotta: #C4795A; --terracotta-dark: #A05A3E; --terracotta-light: #EDD5C8;
+  --cream: #FAF7F2; --warm-white: #FFFEF9;
+  --brown: #5C3D2E; --brown-light: #9A7060;
+  --text: #2E2018; --text-muted: #7A6358;
+  --border: rgba(92,61,46,0.14);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.7; font-size: 16px; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: rgba(92,61,46,0.97); backdrop-filter: blur(12px); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+.nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #fff; text-decoration: none; letter-spacing: 0.01em; }
+.nav-logo span { color: var(--sage-light); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { text-decoration: none; color: rgba(255,255,255,0.72); font-size: 14px; font-weight: 400; letter-spacing: 0.02em; transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: #fff; }
+.nav-cta { background: var(--terracotta); color: #fff; border: none; padding: 10px 22px; border-radius: 50px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+.nav-cta:hover { background: var(--terracotta-dark); transform: translateY(-1px); }
+.hamburger { display: none; background: none; border: none; cursor: pointer; font-size: 24px; color: #fff; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* BACK BAR */
+.back-bar { background: var(--cream); border-bottom: 1px solid var(--border); padding: 14px 5%; display: flex; align-items: center; gap: 12px; margin-top: 68px; }
+.back-btn { display: inline-flex; align-items: center; gap: 8px; background: none; border: 1.5px solid var(--border); color: var(--brown); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 18px; border-radius: 50px; cursor: pointer; transition: all 0.2s; }
+.back-btn:hover { background: var(--brown); color: #fff; border-color: var(--brown); }
+.back-btn svg { width: 14px; height: 14px; }
+.breadcrumb { font-size: 13px; color: var(--text-muted); }
+.breadcrumb span { color: var(--brown); font-weight: 500; }
+
+/* PAGE HERO BANNERS */
+.page-hero { padding: 60px 5% 52px; position: relative; overflow: hidden; }
+.page-hero.sage-hero { background: linear-gradient(135deg, #2e5c34 0%, #4a7d50 50%, #6a9e70 100%); }
+.page-hero.terra-hero { background: linear-gradient(135deg, #7a3520 0%, #a55038 50%, #c4795a 100%); }
+.page-hero.warm-hero { background: linear-gradient(135deg, #4a2a18 0%, #6e3e28 50%, #9a6050 100%); }
+.page-hero.gold-hero { background: linear-gradient(135deg, #6a4a10 0%, #906820 50%, #c0902a 100%); }
+.page-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+.page-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4.5vw, 58px); font-weight: 500; color: #fff; line-height: 1.15; margin-bottom: 0.75rem; }
+.page-hero h1 em { font-style: italic; color: rgba(255,255,255,0.82); }
+.page-hero p { font-size: 17px; color: rgba(255,255,255,0.82); max-width: 560px; line-height: 1.8; }
+.hero-deco { position: absolute; right: 6%; top: 50%; transform: translateY(-50%); font-size: 110px; opacity: 0.1; pointer-events: none; }
+
+/* SECTION WRAP */
+.section-wrap { max-width: 1100px; margin: 0 auto; padding: 64px 5%; }
+
+/* LABELS */
+.section-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); background: var(--terracotta-light); padding: 6px 16px; border-radius: 50px; margin-bottom: 1rem; }
+.section-tag.sage { color: #3a6e40; background: var(--sage-pale); }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 3.5vw, 48px); font-weight: 500; color: var(--brown); line-height: 1.2; margin-bottom: 1rem; }
+.section-title em { font-style: italic; color: var(--sage); }
+.section-sub { font-size: 17px; color: var(--text-muted); max-width: 560px; line-height: 1.8; }
+
+/* ── HOME ── */
+#home { margin-top: 68px; }
+.home-hero { background: linear-gradient(135deg, #301a0d 0%, #5c3d2e 45%, #7a5040 100%); padding: 80px 5% 72px; position: relative; overflow: hidden; }
+.home-hero-deco { position: absolute; inset: 0; opacity: 0.07; background: radial-gradient(circle at 15% 55%, #7A9E7E 0%, transparent 50%), radial-gradient(circle at 85% 15%, #C4795A 0%, transparent 45%); pointer-events: none; }
+.home-hero-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 2; }
+.home-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px, 5vw, 70px); line-height: 1.1; font-weight: 500; color: #fff; margin-bottom: 1.5rem; }
+.home-hero h1 em { color: var(--sage-light); font-style: italic; }
+.home-hero p { font-size: 18px; color: rgba(255,255,255,0.78); max-width: 460px; margin-bottom: 2rem; line-height: 1.8; }
+.btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary { background: var(--terracotta); color: #fff; padding: 14px 32px; border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; display: inline-block; }
+.btn-primary:hover { background: var(--terracotta-dark); transform: translateY(-2px); }
+.btn-light { background: rgba(255,255,255,0.14); color: #fff; padding: 14px 32px; border-radius: 50px; border: 1.5px solid rgba(255,255,255,0.38); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; text-decoration: none; transition: all 0.2s; cursor: pointer; display: inline-block; }
+.btn-light:hover { background: rgba(255,255,255,0.26); }
+.hero-collage { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hero-img { border-radius: 16px; overflow: hidden; }
+.hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-img:nth-child(1) { height: 185px; }
+.hero-img:nth-child(2) { height: 185px; margin-top: 28px; }
+.hero-img:nth-child(3) { height: 165px; margin-top: -18px; }
+.hero-img:nth-child(4) { height: 165px; }
+
+/* Trust bar */
+.trust-bar { background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 22px 5%; }
+.trust-bar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-around; gap: 1.5rem; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 10px; }
+.trust-icon { font-size: 20px; }
+.trust-item span { font-size: 14px; color: var(--text-muted); }
+.trust-item strong { color: var(--brown); }
+
+/* Quote banner */
+.quote-banner { background: var(--sage); padding: 52px 5%; text-align: center; }
+.quote-banner blockquote { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 3vw, 36px); font-style: italic; color: #fff; line-height: 1.5; max-width: 800px; margin: 0 auto 14px; }
+.quote-banner cite { font-size: 13px; color: rgba(255,255,255,0.7); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Home service cards */
+.home-services { background: var(--cream); padding: 64px 5%; }
+.home-services-inner { max-width: 1100px; margin: 0 auto; }
+.home-services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-top: 2.5rem; }
+.hs-card { background: var(--warm-white); border-radius: 20px; padding: 32px 24px; border: 2px solid var(--border); text-align: center; transition: all 0.25s; cursor: pointer; }
+.hs-card:hover { transform: translateY(-6px); border-color: var(--sage); background: var(--sage-pale); box-shadow: 0 12px 32px rgba(122,158,126,0.18); }
+.hs-icon { font-size: 38px; margin-bottom: 14px; }
+.hs-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--brown); margin-bottom: 8px; }
+.hs-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* Testimonials */
+.testimonials-section { background: var(--terracotta); padding: 68px 5%; }
+.testimonials-inner { max-width: 1100px; margin: 0 auto; }
+.testimonials-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 3.5vw, 44px); color: #fff; text-align: center; margin-bottom: 0.5rem; }
+.testimonials-inner .sub { color: rgba(255,255,255,0.72); text-align: center; font-size: 16px; margin-bottom: 3rem; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.testimonial-card { background: rgba(255,255,255,0.16); border-radius: 20px; padding: 32px; border: 1px solid rgba(255,255,255,0.22); }
+.stars { color: #FFD780; font-size: 16px; margin-bottom: 14px; letter-spacing: 2px; }
+.testimonial-card p { font-size: 15px; color: rgba(255,255,255,0.92); line-height: 1.7; font-style: italic; margin-bottom: 18px; }
+.testimonial-author { font-size: 12px; color: rgba(255,255,255,0.62); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* CTA band */
+.cta-band { background: var(--brown); padding: 72px 5%; text-align: center; }
+.cta-band h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 4vw, 46px); color: #fff; margin-bottom: 1rem; }
+.cta-band p { font-size: 17px; color: rgba(255,255,255,0.72); max-width: 540px; margin: 0 auto 2rem; line-height: 1.8; }
+
+/* ── ABOUT ── */
+.about-story { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-bottom: 64px; }
+.about-img-wrap { border-radius: 24px; overflow: hidden; position: relative; box-shadow: 0 24px 64px rgba(92,61,46,0.22); }
+.about-img-wrap img { width: 100%; height: 420px; object-fit: cover; display: block; }
+.about-img-badge { position: absolute; bottom: 20px; left: 20px; background: var(--terracotta); color: #fff; padding: 10px 20px; border-radius: 50px; font-size: 13px; font-weight: 500; }
+.pull-quote { background: var(--brown); border-radius: 20px; padding: 36px 40px; margin: 2rem 0; }
+.pull-quote blockquote { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-style: italic; color: #fff; line-height: 1.5; }
+.pull-quote cite { display: block; margin-top: 14px; font-size: 12px; color: rgba(255,255,255,0.55); font-style: normal; text-transform: uppercase; letter-spacing: 0.1em; }
+.values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.value-item { background: var(--warm-white); border-radius: 16px; padding: 28px; border: 2px solid var(--border); transition: all 0.2s; }
+.value-item:hover { border-color: var(--sage-light); transform: translateY(-3px); }
+.value-icon { font-size: 30px; margin-bottom: 12px; }
+.value-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--brown); margin-bottom: 8px; }
+.value-item p { font-size: 14px; color: var(--text-muted); }
+.milestones { background: var(--terracotta); border-radius: 24px; padding: 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; margin-top: 48px; }
+.milestone h3 { font-family: 'Cormorant Garamond', serif; font-size: 44px; color: #fff; font-weight: 500; }
+.milestone p { font-size: 13px; color: rgba(255,255,255,0.72); margin-top: 6px; }
+
+/* ── TEAM ── */
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.team-card { background: var(--warm-white); border-radius: 24px; overflow: hidden; border: 2px solid var(--border); transition: transform 0.25s, box-shadow 0.25s; }
+.team-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(92,61,46,0.16); }
+.team-photo { height: 240px; overflow: hidden; position: relative; }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.team-card:hover .team-photo img { transform: scale(1.05); }
+.team-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(92,61,46,0.5), transparent 60%); }
+.team-info { padding: 28px; }
+.team-info h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--brown); }
+.team-role { font-size: 11px; font-weight: 500; color: var(--terracotta); letter-spacing: 0.1em; text-transform: uppercase; margin: 4px 0 12px; }
+.team-info p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.team-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.tag { font-size: 11px; padding: 5px 12px; border-radius: 50px; background: var(--sage-pale); color: #3a6e40; border: 1px solid var(--sage-light); font-weight: 500; }
+.team-quote-band { background: var(--sage); border-radius: 24px; padding: 48px; margin-top: 48px; text-align: center; }
+.team-quote-band p { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-style: italic; color: #fff; line-height: 1.6; max-width: 700px; margin: 0 auto 14px; }
+.team-quote-band cite { font-size: 13px; color: rgba(255,255,255,0.68); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── SERVICES ── */
+.services-intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 56px; }
+.services-intro-img { border-radius: 24px; overflow: hidden; box-shadow: 0 20px 56px rgba(92,61,46,0.18); }
+.services-intro-img img { width: 100%; height: 380px; object-fit: cover; display: block; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.service-card { background: var(--warm-white); border-radius: 20px; padding: 32px; border: 2px solid var(--border); transition: all 0.25s; }
+.service-card:hover { border-color: var(--terracotta-light); background: #FEF5F0; transform: translateY(-5px); box-shadow: 0 14px 40px rgba(196,121,90,0.14); }
+.service-icon { width: 58px; height: 58px; border-radius: 16px; background: var(--terracotta); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 1.2rem; }
+.service-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 23px; color: var(--brown); margin-bottom: 10px; }
+.service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+.service-ages { display: inline-block; margin-top: 16px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--terracotta); text-transform: uppercase; background: var(--terracotta-light); padding: 5px 14px; border-radius: 50px; }
+.approach-band { background: var(--brown); border-radius: 24px; padding: 52px; margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+.approach-item { text-align: center; }
+.approach-item .num { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--sage-light); font-weight: 500; }
+.approach-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #fff; margin: 8px 0 10px; }
+.approach-item p { font-size: 14px; color: rgba(255,255,255,0.62); line-height: 1.6; }
+
+/* ── INSURANCE ── */
+.insurance-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
+.plans-list { list-style: none; margin: 1.5rem 0; }
+.plans-list li { padding: 14px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text); }
+.plans-list li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
+.insurance-note { background: var(--brown); border-radius: 16px; padding: 32px 36px; margin-top: 2rem; }
+.insurance-note h4 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #fff; margin-bottom: 10px; }
+.insurance-note p { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; }
+.fee-card { background: var(--warm-white); border-radius: 20px; border: 2px solid var(--border); overflow: hidden; }
+.fee-card-header { background: var(--terracotta); padding: 26px 32px; }
+.fee-card-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: #fff; }
+.fee-card-header p { font-size: 14px; color: rgba(255,255,255,0.78); margin-top: 4px; }
+.fee-card-body { padding: 8px 32px 24px; }
+.fee-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+.fee-row:last-of-type { border-bottom: none; }
+.fee-amount { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--brown); }
+.sliding-note { font-size: 13px; color: var(--text-muted); font-style: italic; padding: 16px 32px 28px; background: var(--sage-pale); border-top: 1px solid var(--sage-light); line-height: 1.7; }
+
+/* ── CONTACT ── */
+.contact-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+.contact-details { display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; }
+.contact-icon { width: 48px; height: 48px; background: var(--terracotta); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.contact-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--brown); margin-bottom: 4px; }
+.contact-item p { font-size: 14px; color: var(--text-muted); }
+.contact-warmup { background: var(--sage); border-radius: 20px; padding: 32px 36px; margin-top: 8px; }
+.contact-warmup p { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: #fff; line-height: 1.6; }
+.contact-warmup cite { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.68); text-transform: uppercase; letter-spacing: 0.08em; font-style: normal; }
+.map-wrapper { border-radius: 16px; overflow: hidden; border: 2px solid var(--border); margin-top: 1.5rem; }
+.map-wrapper iframe { display: block; width: 100%; height: 220px; border: none; }
+.map-caption { background: var(--warm-white); padding: 12px 18px; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border); }
+.map-caption a { color: var(--terracotta); text-decoration: none; font-weight: 500; }
+.map-caption a:hover { text-decoration: underline; }
+.contact-form-wrap { background: var(--warm-white); border-radius: 24px; padding: 44px; border: 2px solid var(--border); box-shadow: 0 8px 48px rgba(92,61,46,0.1); }
+.contact-form-wrap h3 { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--brown); margin-bottom: 8px; }
+.contact-form-wrap > p { font-size: 15px; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.7; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.form-group label { font-size: 11px; font-weight: 500; color: var(--brown); letter-spacing: 0.07em; text-transform: uppercase; }
+.form-group input, .form-group select, .form-group textarea { padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); background: var(--cream); outline: none; transition: border-color 0.2s; width: 100%; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sage); background: var(--warm-white); }
+.form-group textarea { resize: vertical; min-height: 110px; }
+.form-submit { width: 100%; background: var(--terracotta); color: #fff; padding: 16px; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
+.form-submit:hover { background: var(--terracotta-dark); }
+
+/* FOOTER */
+footer { background: var(--brown); color: rgba(255,255,255,0.8); padding: 60px 5% 40px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+.footer-brand .logo { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: #fff; margin-bottom: 12px; display: block; cursor: pointer; }
+.footer-brand .logo span { color: var(--sage-light); }
+.footer-brand p { font-size: 14px; color: rgba(255,255,255,0.58); line-height: 1.7; max-width: 280px; }
+.footer-col h5 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
+.footer-col a { display: block; color: rgba(255,255,255,0.68); text-decoration: none; font-size: 14px; margin-bottom: 8px; transition: color 0.2s; cursor: pointer; }
+.footer-col a:hover { color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 1100px; margin: 0 auto; }
+.footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.38); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--sage); color: #fff; padding: 14px 28px; border-radius: 50px; font-size: 15px; opacity: 0; transition: all 0.4s; pointer-events: none; z-index: 999; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 68px; left: 0; right: 0; background: var(--brown); padding: 1.5rem 5%; gap: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); z-index: 199; }
+  .nav-links.open + .nav-cta { display: none; }
+  .home-hero-inner, .about-story, .services-intro-grid, .insurance-layout, .contact-layout { grid-template-columns: 1fr; }
+  .hero-collage { display: none; }
+  .team-grid, .testimonials-grid, .services-grid, .home-services-grid { grid-template-columns: 1fr 1fr; }
+  .milestones, .approach-band { grid-template-columns: 1fr 1fr; padding: 36px 28px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 580px) {
+  .team-grid, .testimonials-grid, .services-grid, .home-services-grid { grid-template-columns: 1fr; }
+  .milestones { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="#" onclick="showPage('home')">Willowbrook <span>Psychology</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#" onclick="showPage('home')" data-page="home">Home</a></li>
+    <li><a href="#" onclick="showPage('about')" data-page="about">About</a></li>
+    <li><a href="#" onclick="showPage('team')" data-page="team">Our Team</a></li>
+    <li><a href="#" onclick="showPage('services')" data-page="services">Services</a></li>
+    <li><a href="#" onclick="showPage('insurance')" data-page="insurance">Insurance</a></li>
+    <li><a href="#" onclick="showPage('contact')" data-page="contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#" onclick="showPage('contact')">Book a Consultation</a>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div id="home" class="page active">
+  <div class="home-hero">
+    <div class="home-hero-deco"></div>
+    <div class="home-hero-inner">
+      <div>
+        <div class="section-tag" style="background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.9);margin-bottom:1.2rem;">Welcome to Willowbrook</div>
+        <h1>A place to <em>heal,</em><br>grow &amp; thrive</h1>
+        <p>Compassionate, evidence-based psychological care for every stage of life — from young children to older adults — in a warm, judgment-free space.</p>
+        <div class="btn-group">
+          <a class="btn-primary" href="#" onclick="showPage('contact')">Schedule a Free Consult</a>
+          <a class="btn-light" href="#" onclick="showPage('services')">Explore Our Services</a>
+        </div>
+      </div>
+      <div class="hero-collage">
+        <div class="hero-img"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=260&fit=crop&auto=format" alt="Welcoming therapist" loading="lazy"></div>
+        <div class="hero-img"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=260&fit=crop&auto=format" alt="Family outdoors" loading="lazy"></div>
+        <div class="hero-img"><img src="https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=400&h=220&fit=crop&auto=format" alt="Calm office" loading="lazy"></div>
+        <div class="hero-img"><img src="https://images.unsplash.com/photo-1488998628026-e8f87e2b1b8d?w=400&h=220&fit=crop&auto=format" alt="Person journaling" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><div class="trust-icon">🏅</div><span><strong>15+ years</strong> serving Portland</span></div>
+      <div class="trust-item"><div class="trust-icon">🌿</div><span><strong>All ages</strong> welcome — 3 to 95+</span></div>
+      <div class="trust-item"><div class="trust-icon">💻</div><span><strong>Telehealth</strong> available statewide</span></div>
+      <div class="trust-item"><div class="trust-icon">💛</div><span><strong>Sliding scale</strong> fees available</span></div>
+      <div class="trust-item"><div class="trust-icon">🔒</div><span><strong>Confidential</strong> &amp; judgment-free</span></div>
+    </div>
+  </div>
+
+  <div class="quote-banner">
+    <blockquote>"You don't have to be in crisis to seek support. You just have to be ready to grow."</blockquote>
+    <cite>— The Willowbrook Team</cite>
+  </div>
+
+  <div class="home-services">
+    <div class="home-services-inner">
+      <div style="text-align:center;">
+        <div class="section-tag">What We Offer</div>
+        <h2 class="section-title" style="font-size:clamp(28px,3.5vw,44px);">Support for every <em>stage of life</em></h2>
+        <p class="section-sub" style="margin:0 auto 2.5rem;">Click any area below to learn more about our services.</p>
+      </div>
+      <div class="home-services-grid">
+        <div class="hs-card" onclick="showPage('services')"><div class="hs-icon">🧒</div><h3>Child Therapy</h3><p>Play-based care for children ages 3–12 navigating anxiety, behavior, and family change.</p></div>
+        <div class="hs-card" onclick="showPage('services')"><div class="hs-icon">🧑</div><h3>Teen Therapy</h3><p>A confidential space for adolescents to process identity, stress, and growing up.</p></div>
+        <div class="hs-card" onclick="showPage('services')"><div class="hs-icon">🧑‍💼</div><h3>Adult Therapy</h3><p>Individual sessions for anxiety, depression, trauma, burnout &amp; life transitions.</p></div>
+        <div class="hs-card" onclick="showPage('services')"><div class="hs-icon">💑</div><h3>Couples &amp; Families</h3><p>Rebuilding connection and communication for couples and families of all kinds.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonials-section">
+    <div class="testimonials-inner">
+      <h2>What Our Clients Say</h2>
+      <p class="sub">Real words from real people who took the first step.</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Coming to Willowbrook was the best decision I made for myself. I felt heard from the very first session — no judgment, just genuine care."</p>
+          <div class="testimonial-author">— M.R., adult client</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Dr. Williams is incredible with our son. He went from refusing to talk about his feelings to opening up completely. The change has been remarkable."</p>
+          <div class="testimonial-author">— Parent of a 9-year-old</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"My husband and I were on the verge of giving up. After six months of couples therapy here, we've found our way back to each other."</p>
+          <div class="testimonial-author">— Couples therapy client</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2>Ready to take the first step?</h2>
+    <p>We offer a free 15-minute phone consultation so you can meet us before committing to anything. No pressure — just a conversation.</p>
+    <a class="btn-primary" href="#" onclick="showPage('contact')" style="font-size:16px;padding:16px 40px;">Schedule Your Free Call →</a>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div id="about" class="page">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+    <span class="breadcrumb">Home › <span>About</span></span>
+  </div>
+  <div class="page-hero sage-hero">
+    <div class="hero-deco">🌿</div>
+    <div class="page-hero-inner">
+      <h1>Rooted in <em>compassion,</em><br>guided by science</h1>
+      <p>Founded in 2010, we've been a trusted healing space in Portland for over 15 years — for every age, every story, every journey.</p>
+    </div>
+  </div>
+  <div class="section-wrap">
+    <div class="about-story">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&h=500&fit=crop&auto=format" alt="Warm therapy office interior" loading="lazy">
+        <div class="about-img-badge">Est. 2010 · Portland, OR</div>
+      </div>
+      <div>
+        <div class="section-tag">Our Story</div>
+        <h2 class="section-title">A practice built on <em>belonging</em></h2>
+        <p style="color:var(--text-muted);font-size:17px;line-height:1.8;margin-bottom:1.2rem;">Willowbrook Psychology was born from a simple belief: that every person — regardless of age, background, or circumstance — deserves access to compassionate, high-quality mental health care.</p>
+        <p style="color:var(--text-muted);font-size:16px;line-height:1.8;margin-bottom:1.5rem;">Our team uses evidence-based approaches while always treating the whole person — not just the presenting concern. Whether you're 5 or 85, we meet you exactly where you are.</p>
+        <div class="pull-quote">
+          <blockquote>"Healing doesn't mean the damage never existed. It means the damage no longer controls your life."</blockquote>
+          <cite>— Our guiding philosophy</cite>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:48px;">
+      <div class="section-tag sage">Our Values</div>
+      <h2 class="section-title" style="margin-bottom:2rem;">What we <em>stand for</em></h2>
+      <div class="values-grid">
+        <div class="value-item"><div class="value-icon">🌿</div><h4>Whole-Person Care</h4><p>We treat the full human being — mind, body, relationships, and lived experience.</p></div>
+        <div class="value-item"><div class="value-icon">🔬</div><h4>Evidence-Based Practice</h4><p>Our methods are grounded in the best available clinical research, updated as the field evolves.</p></div>
+        <div class="value-item"><div class="value-icon">🕊️</div><h4>Inclusive &amp; Affirming</h4><p>We warmly welcome clients of all backgrounds, identities, cultures, and orientations.</p></div>
+        <div class="value-item"><div class="value-icon">🤲</div><h4>Accessible to All</h4><p>Sliding scale fees, insurance accepted, telehealth available — because cost shouldn't decide who gets care.</p></div>
+      </div>
+    </div>
+    <div class="milestones">
+      <div class="milestone"><h3>15+</h3><p>Years serving Portland</p></div>
+      <div class="milestone"><h3>2,400+</h3><p>Clients helped</p></div>
+      <div class="milestone"><h3>8</h3><p>Licensed clinicians</p></div>
+      <div class="milestone"><h3>98%</h3><p>Client satisfaction</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEAM ══ -->
+<div id="team" class="page">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+    <span class="breadcrumb">Home › <span>Our Team</span></span>
+  </div>
+  <div class="page-hero terra-hero">
+    <div class="hero-deco">🤝</div>
+    <div class="page-hero-inner">
+      <h1>Meet the people <em>behind your care</em></h1>
+      <p>Our licensed clinicians bring warmth, expertise, and genuine dedication to every therapeutic relationship.</p>
+    </div>
+  </div>
+  <div class="section-wrap">
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=500&h=340&fit=crop&auto=format" alt="Dr. Sarah Chen" loading="lazy"><div class="team-photo-overlay"></div></div>
+        <div class="team-info">
+          <h3>Dr. Sarah Chen, PhD</h3>
+          <p class="team-role">Clinical Director &amp; Psychologist</p>
+          <p>Dr. Chen specializes in anxiety, depression, and trauma across the lifespan. With 18 years of experience, she brings warmth and rigor to every therapeutic relationship.</p>
+          <div class="team-tags"><span class="tag">Anxiety</span><span class="tag">Trauma</span><span class="tag">CBT</span><span class="tag">Adults</span></div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=500&h=340&fit=crop&auto=format" alt="Marcus Williams" loading="lazy"><div class="team-photo-overlay"></div></div>
+        <div class="team-info">
+          <h3>Marcus Williams, PsyD</h3>
+          <p class="team-role">Child &amp; Family Psychologist</p>
+          <p>Marcus works with children ages 4–17 and their families. He uses play-based and family systems approaches to help young people flourish.</p>
+          <div class="team-tags"><span class="tag">Children</span><span class="tag">Families</span><span class="tag">ADHD</span><span class="tag">Play Therapy</span></div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=500&h=340&fit=crop&auto=format" alt="Dr. Priya Nair" loading="lazy"><div class="team-photo-overlay"></div></div>
+        <div class="team-info">
+          <h3>Dr. Priya Nair, PhD</h3>
+          <p class="team-role">Licensed Psychologist</p>
+          <p>Priya specializes in couples therapy, life transitions, and grief. She integrates mindfulness-based and psychodynamic approaches for lasting change.</p>
+          <div class="team-tags"><span class="tag">Couples</span><span class="tag">Grief</span><span class="tag">Mindfulness</span><span class="tag">Adults</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="team-quote-band">
+      <p>"The relationship between therapist and client is itself a healing force. We don't just apply techniques — we show up, fully present, for every person who walks through our door."</p>
+      <cite>— Dr. Sarah Chen, Clinical Director</cite>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SERVICES ══ -->
+<div id="services" class="page">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+    <span class="breadcrumb">Home › <span>Services</span></span>
+  </div>
+  <div class="page-hero warm-hero">
+    <div class="hero-deco">💬</div>
+    <div class="page-hero-inner">
+      <h1>Therapy for <em>every season</em> of life</h1>
+      <p>Whether you're 5 or 85, navigating your first challenge or your hundredth, we have a path forward for you.</p>
+    </div>
+  </div>
+  <div class="section-wrap">
+    <div class="services-intro-grid">
+      <div>
+        <div class="section-tag">Our Approach</div>
+        <h2 class="section-title">Tailored to <em>you,</em> not a template</h2>
+        <p style="color:var(--text-muted);font-size:17px;line-height:1.8;margin-bottom:1.2rem;">We don't believe in one-size-fits-all therapy. Our clinicians draw from multiple evidence-based modalities — CBT, DBT, EMDR, psychodynamic therapy, play therapy — selecting the right tools for you.</p>
+        <p style="color:var(--text-muted);font-size:16px;line-height:1.8;">Sessions are available in person at our Portland office or via secure telehealth for clients anywhere in Oregon or Washington.</p>
+      </div>
+      <div class="services-intro-img">
+        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&h=440&fit=crop&auto=format" alt="Therapy session setting" loading="lazy">
+      </div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon">🧒</div><h3>Child Therapy</h3><p>Play-based, developmentally attuned therapy for children ages 3–12 dealing with anxiety, behavioral challenges, or family changes.</p><span class="service-ages">Ages 3–12</span></div>
+      <div class="service-card"><div class="service-icon">🧑</div><h3>Adolescent Therapy</h3><p>A confidential space for teens navigating identity, academic stress, social challenges, depression, and the transition toward adulthood.</p><span class="service-ages">Ages 13–17</span></div>
+      <div class="service-card"><div class="service-icon">🧑‍💼</div><h3>Adult Individual Therapy</h3><p>One-on-one therapy for adults facing anxiety, depression, trauma, burnout, life transitions, and relationship issues.</p><span class="service-ages">Ages 18+</span></div>
+      <div class="service-card"><div class="service-icon">👴</div><h3>Older Adult Care</h3><p>Compassionate support for older adults dealing with grief, health challenges, caregiving stress, and end-of-life concerns.</p><span class="service-ages">Ages 60+</span></div>
+      <div class="service-card"><div class="service-icon">💑</div><h3>Couples Therapy</h3><p>Helping couples improve communication, rebuild trust, navigate conflict, and deepen connection — whether in crisis or simply growing together.</p><span class="service-ages">All ages</span></div>
+      <div class="service-card"><div class="service-icon">👨‍👩‍👧</div><h3>Family Therapy</h3><p>Systemic family therapy to heal dynamics, improve communication, and support families through transitions and life changes.</p><span class="service-ages">All ages</span></div>
+    </div>
+    <div class="approach-band">
+      <div class="approach-item"><div class="num">01</div><h4>Listen deeply</h4><p>We start by truly understanding your story — no assumptions, no rush.</p></div>
+      <div class="approach-item"><div class="num">02</div><h4>Build together</h4><p>We co-create a care plan that fits your goals, pace, and real life.</p></div>
+      <div class="approach-item"><div class="num">03</div><h4>Grow at your pace</h4><p>Progress isn't linear. We meet you wherever you are, every session.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INSURANCE ══ -->
+<div id="insurance" class="page">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+    <span class="breadcrumb">Home › <span>Insurance &amp; Fees</span></span>
+  </div>
+  <div class="page-hero gold-hero">
+    <div class="hero-deco">💛</div>
+    <div class="page-hero-inner">
+      <h1>Transparent, <em>accessible</em> pricing</h1>
+      <p>We believe cost should never be the reason someone doesn't get care. Here's exactly what to expect.</p>
+    </div>
+  </div>
+  <div class="section-wrap">
+    <div class="insurance-layout">
+      <div>
+        <div class="section-tag">Accepted Insurance</div>
+        <h2 class="section-title" style="font-size:clamp(26px,3vw,40px);">Insurance we <em>accept</em></h2>
+        <ul class="plans-list">
+          <li>Aetna</li><li>Blue Cross Blue Shield</li><li>Cigna</li>
+          <li>United Healthcare / Optum</li><li>Kaiser Permanente (select plans)</li>
+          <li>Magellan Health</li><li>Anthem</li><li>Medicare (select providers)</li>
+          <li>Out-of-network benefits (superbill provided)</li>
+        </ul>
+        <div class="insurance-note">
+          <h4>Not sure about your coverage?</h4>
+          <p>Our intake coordinator will verify your insurance benefits before your first appointment — no surprises. Contact us and we'll handle the details on your behalf.</p>
+        </div>
+      </div>
+      <div>
+        <div class="fee-card">
+          <div class="fee-card-header"><h3>Self-Pay Rates</h3><p>Sliding scale available — just ask us</p></div>
+          <div class="fee-card-body">
+            <div class="fee-row"><span>Initial consultation (60 min)</span><span class="fee-amount">$200</span></div>
+            <div class="fee-row"><span>Individual therapy (50 min)</span><span class="fee-amount">$175</span></div>
+            <div class="fee-row"><span>Couples / family session (60 min)</span><span class="fee-amount">$210</span></div>
+            <div class="fee-row"><span>Child therapy (45 min)</span><span class="fee-amount">$160</span></div>
+            <div class="fee-row"><span>Group therapy (90 min)</span><span class="fee-amount">$75</span></div>
+          </div>
+          <p class="sliding-note">Sliding scale fees available based on financial need. No one is turned away due to inability to pay — please reach out to discuss your options confidentially.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div id="contact" class="page">
+  <div class="back-bar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>
+    <span class="breadcrumb">Home › <span>Contact</span></span>
+  </div>
+  <div class="page-hero sage-hero">
+    <div class="hero-deco">💬</div>
+    <div class="page-hero-inner">
+      <h1>Ready to take the <em>first step?</em></h1>
+      <p>Reaching out is the hardest part — we'll take it from there. We respond within one business day.</p>
+    </div>
+  </div>
+  <div class="section-wrap">
+    <div class="contact-layout">
+      <div>
+        <div class="contact-details">
+          <div class="contact-item"><div class="contact-icon">📍</div><div><h4>Our Location</h4><p>1248 Willowbrook Lane, Suite 204<br>Portland, OR 97201</p></div></div>
+          <div class="contact-item"><div class="contact-icon">📞</div><div><h4>Phone</h4><p>(503) 555-0182<br><span style="font-size:12px;color:var(--text-muted);">Mon–Fri, 9am–5pm</span></p></div></div>
+          <div class="contact-item"><div class="contact-icon">✉️</div><div><h4>Email</h4><p>hello@willowbrookpsych.com</p></div></div>
+          <div class="contact-item"><div class="contact-icon">🕐</div><div><h4>Office Hours</h4><p>Mon–Fri: 8am–7pm · Sat: 9am–2pm · Sun: Closed</p></div></div>
+        </div>
+        <div class="contact-warmup">
+          <p>"Taking the first step toward help is an act of courage. We honor that — and we'll meet you with care every step of the way."</p>
+          <cite>— The Willowbrook Team</cite>
+        </div>
+        <div class="map-wrapper">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2795.4085265982607!2d-122.68139692346018!3d45.52306657107556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950a0c44413d27%3A0x6e7d9a3c3e2c2a3e!2sPortland%2C%20OR%2097201!5e0!3m2!1sen!2sus!4v1712000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Willowbrook Psychology location map"></iframe>
+          <div class="map-caption">📍 Portland, OR 97201 &nbsp;·&nbsp;<a href="https://maps.google.com/?q=Portland,OR+97201" target="_blank" rel="noopener">Get Directions ↗</a></div>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Send Us a Message</h3>
+        <p>Fill this out and our intake team will reach out to schedule your free 15-minute consultation — no commitment required.</p>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" placeholder="Jane"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@example.com"></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" placeholder="(503) 555-0100"></div>
+        <div class="form-group"><label>I'm looking for support for…</label>
+          <select><option value="">Select an option</option><option>Myself (adult)</option><option>My child or teen</option><option>My relationship / couple</option><option>My family</option><option>An older adult / senior</option></select>
+        </div>
+        <div class="form-group"><label>Preferred contact method</label>
+          <select><option>Email</option><option>Phone call</option><option>Text message</option></select>
+        </div>
+        <div class="form-group"><label>Anything you'd like to share? (optional)</label><textarea placeholder="What brings you in? What are you hoping for? No pressure — share as much or as little as feels right."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">Send Message — We'll Be in Touch ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo" onclick="showPage('home')">Willowbrook <span>Psychology</span></span>
+      <p>A warm, evidence-based practice serving individuals, couples, and families of all ages in Portland, OR since 2010.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigate</h5>
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('about')">About Us</a>
+      <a onclick="showPage('team')">Our Team</a>
+      <a onclick="showPage('services')">Services</a>
+      <a onclick="showPage('insurance')">Insurance &amp; Fees</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a>(503) 555-0182</a>
+      <a>hello@willowbrookpsych.com</a>
+      <a>1248 Willowbrook Ln, Suite 204</a>
+      <a>Portland, OR 97201</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Willowbrook Psychology · All rights reserved</p>
+    <p><a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">Privacy Policy</a> · <a href="#" style="color:rgba(255,255,255,0.4);text-decoration:none;">HIPAA Notice</a></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Message sent! We'll be in touch within one business day.</div>
+
+<script>
+  const pageHistory = ['home'];
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('data-page') === id);
+    });
+    if (pageHistory[pageHistory.length - 1] !== id) pageHistory.push(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('nav-links').classList.remove('open');
+  }
+
+  function goBack() {
+    if (pageHistory.length > 1) {
+      pageHistory.pop();
+      const prev = pageHistory[pageHistory.length - 1];
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(prev).classList.add('active');
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('data-page') === prev);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function submitForm() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
